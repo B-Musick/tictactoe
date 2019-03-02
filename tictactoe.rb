@@ -1,3 +1,5 @@
+require 'byebug'
+
 class TicTacToe
 
     attr_accessor :board_size, :board, :current_player
@@ -9,7 +11,7 @@ class TicTacToe
         
         @player_one = "O"
         @player_two = "X"
-        @current_player = @playerOne
+        @current_player = @player_one
     end
 
     def setBoard 
@@ -47,29 +49,31 @@ class TicTacToe
 
     def prompt
         # Prompt the user to enter a coordinate
-
+        #debugger
         # Below is a hash which is used to set the appropriate grid space
-        place = {"TL":self.board[0][0], "TC":self.board[0][2], "TR":self.board[0][4],
-                "ML":self.board[2][0], "MC":self.board[2][2], "MR":self.board[2][4],
-                "BL":self.board[4][0], "BC":self.board[4][2], "BR":self.board[4][4]}
+        place = {"TL" => [0,0], "TC" => [0,2], "TR" => [0,4],
+                "ML" => [2,0], "MC" => [2,2], "MR" => [2,4],
+                "BL" => [4,0], "BC" => [4,2], "BR" => [4,4]}
         
         choice = ""
         while choice == ""
             # While a choice hasnt been made
-            puts "Pick an empty space. Top-right = "TR", bottom-left = "BL", etc. "
-            choice = gets.chomp # Takes user input, removes the newline character (chomp)
-            if !has.keys.include?(choice)
+            puts "Pick an empty space. Top-right = \"TR\", bottom-left = \"BL\", etc. "
+            choice = gets.chomp.to_s # Takes user input, removes the newline character (chomp)
+            puts choice
+            if !place.has_key?(choice)
                 # If the choice isnt a key in place hash then keep loop going
                 choice == ""
             end
         end
-        self.setLetter(choice,self.current_player) # Set the letter on the board
+        puts self.current_player
+        self.setLetter(place[choice],self.current_player) # Set the letter on the board
         self.setTurn # Change turn to new person
 
     end
 
     def setLetter(pos,letter)
-        pos = letter
+        self.board[pos[0]][pos[1]] = letter
     end
 
     def setTurn
@@ -80,6 +84,7 @@ class TicTacToe
             self.current_player = self.player_one 
         end
     end
+
     def play 
         # Play a round of tictactoe
         # This ends when all spaces in grid dont have empty string
@@ -88,4 +93,6 @@ end
 
 board = TicTacToe.new
 board.setBoard
+board.printBoard
+board.prompt
 board.printBoard
